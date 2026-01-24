@@ -1,66 +1,50 @@
-# PAER: Parallel Auto-Encoding Residual Module for Spectral Dissipation Suppression
+# PAER-GraphCast: Spectral Dissipation Suppression in AI Weather Forecasting
 
-This repository contains the official implementation of the **Parallel Auto-Encoding Residual (PAER)** module. PAER is a "non-invasive" refinement strategy designed to recover high-frequency spatial gradients and restore the energy spectrum in AI-driven weather forecasting models (e.g., GraphCast).
+This repository contains the official implementation of the **Parallel Auto-Encoding Residual (PAER)** module, integrated directly into the **GraphCast** backbone. 
 
 [[DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18360899.svg)](https://doi.org/10.5281/zenodo.18360899)
 
-## Key Features
-- **Spectral Recovery**: Specifically addresses the "oversmoothing" (Spectral Dissipation) caused by MSE loss.
-- **Dynamic Awareness**: Utilizes temporal differences as momentum proxies to capture advancing frontal zones.
-- **Plug-and-Play**: Compatible with pre-trained backbones (GraphCast/Pangu-Weather) without altering the master weights.
+## Overview
+Traditional AI weather models (like standard GraphCast) often suffer from **Spectral Dissipation**—a smoothing effect that erases sharp gradients in frontal zones. **PAER** is a parallel refinement module that:
+- Uses the pre-trained GraphCast as the master predictor.
+- Re-injects high-frequency energy via a bottleneck autoencoder.
+- Preserves the $k^{-3}$ enstrophy cascade law in the dynamic fields.
 
 ---
 
-## Reproduction Guide (Reproduce Paper Results)
+## Reproduction Path (Step-by-Step)
 
-To reproduce the results presented in the manuscript, follow the configuration below in the provided Jupyter Notebook (`Parallel_Auto_Encoding_Error_Correction_Module.ipynb`).
+To reproduce the results presented in the paper (e.g., the 72-hour forecast performance), follow these steps:
 
-### 1. Data Configuration
-The module is validated using the ERA5 reanalysis dataset. Ensure your data loader is configured as follows:
-- **Source**: ERA5 (via Copernicus CDS)
-- **Reference Date**: `2022-01-01`
-- **Spatial Resolution**: `1.0°` (Global grid)
-- **Vertical Levels**: `13` (Standard pressure levels)
-- **Time Steps**: `40` (For training/diagnostic sequences)
+### 1. Data Selection
+Select the benchmark ERA5 sample data with the following parameters (pre-configured in the notebook):
+- **Source**: ERA5 Reanalysis
+- **Test Date**: `2022-01-01`
+- **Spatial Resolution**: `1.0°`
+- **Vertical Levels**: `13` pressure levels
+- **Input Sequence**: `40` time steps
 
-### 2. Evaluation & Rollout Settings
-To verify the **72-hour forecast performance** (the primary benchmark in the paper):
-- **Evaluation Steps**: Set `eval_steps = 12`
-- **Temporal Resolution**: 6 hours per step ($6 \times 12 = 72$ hours total).
+### 2. Module Execution
+Open the primary notebook `Parallel_Auto_Encoding_Error_Correction_Module.ipynb` The code is structured as an integrated pipeline:
+1. **Initialize Master Model**: Loads the pre-trained GraphCast weights.
+2. **Apply PAER Layer**: Activates the parallel residual correction.
 
-### 3. Running the Code
-1. **Environment**: Install dependencies (JAX, Haiku, Cartopy, Xarray).
-2. **Initialization**: Load the pre-trained master model weights.
-3. **Execution**: Run the PAER refinement cells. The script will automatically generate:
-   - RMSE and ACC metrics for 2m Temperature and 10m V-Wind.
-   - Spatial gradient maps comparing "Master Model" vs "PAER Refined" vs "ERA5 Truth".
-   - Power Spectral Density (PSD) analysis plots.
+### 3. Key Parameter for Evaluation
+To verify the **72-hour rollout** accuracy mentioned in the manuscript:
+- Locate the evaluation cell and ensure: **`eval_steps = 12`** - *Note: Since each step represents 6 hours, 12 steps = 72 hours.*
 
+### 4. Expected Results
+Upon completion, the notebook will generate:
+- **RMSE/ACC Metrics**: Confirming the drop in 2m Temperature RMSE from ~8.78 to **4.99** (43.16% improvement).
+- **Spectral Diagnostics**: Power Spectral Density (PSD) plots showing energy restoration at high wavenumbers.
+- **Visualization**: Comparison maps showing the sharpened 10m V-wind gradients.
 ---
-
-## Expected Performance
-By implementing PAER with the above settings, you should observe:
-- **RMSE Reduction**: ~43.16% improvement in 2m Temperature at the 72h mark.
-- **Gradient Recovery**: Local gradient spans in 10m V-wind recovered by up to 32.74 m/s.
-- **Physical Fidelity**: The energy spectrum will align more closely with the $k^{-3}$ enstrophy cascade law.
-
-
-
----
-
-##  Repository Structure
-- `Parallel_Auto_Encoding_Error_Correction_Module.ipynb`: Main implementation and reproduction notebook.
-- `results/`: Contains generated diagnostic maps and PDF reports.
-- `metadata_fix.py`: Utility script to ensure Colab compatibility.
 
 ## Citation
-If you use this code or the PAER module in your research, please cite:
+If you utilize this code or the PAER module, please cite the software archive:
 
-**Software Citation:**
-> Wang, Y. (2026). Parallel Auto-Encoding Residual (PAER) Module Implementation (Version 1.0.0). Zenodo. https://doi.org/10.5281/zenodo.18360899
-
-**Paper Citation:**
-> Wang, Y. (2026). Dissipation Suppression of the Atmospheric Dynamical Field Spectrum Based on Parallel Auto-Encoding Error Correction. *Journal of Advances in Modeling Earth Systems (JAMES)*. (Manuscript submitted).
+> Wang, Y. (2026). Parallel Auto-Encoding Residual (PAER) Module Implementation (Version 1.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.18360899
 
 ---
 **Contact**: Yuzhi Wang ([wangyzh267@mail2.sysu.edu.cn](mailto:wangyzh267@mail2.sysu.edu.cn))
+**Institution**: College of Atmospheric Sciences, Sun Yat-sen University
