@@ -12,7 +12,7 @@ Traditional AI weather models (like standard GraphCast) often suffer from **Spec
 
 ---
 
-## Reproduction Path (Step-by-Step)
+## Reproduction Path 
 
 To reproduce the results presented in the paper (e.g., the 72-hour forecast performance), follow these steps:
 
