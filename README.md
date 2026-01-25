@@ -39,6 +39,17 @@ Upon completion, the notebook will generate:
 - **Spectral Diagnostics**: Power Spectral Density (PSD) plots showing energy restoration at high wavenumbers.
 - **Visualization**: Comparison maps showing the sharpened 10m V-wind gradients.
 ---
+### 5. Acknowledgements & Data Sources
+
+## 1. Model Backbone (GraphCast)
+This project utilizes the **GraphCast** model as its primary forecasting backbone. We express our gratitude to the **Google DeepMind** team for open-sourcing the GraphCast framework and providing the pre-trained weights.
+- **Official Repository**: [google-deepmind/graphcast](https://github.com/google-deepmind/graphcast)
+- **Reference**: Lam, R., et al. (2023). "Learning skillful medium-range global weather forecasting." *Science*.
+
+## 2. Data Source (ERA5)
+The training and evaluation of the PAER module are conducted using the **ERA5 reanalysis dataset**. We thank the **European Centre for Medium-Range Weather Forecasts (ECMWF)** and the **Copernicus Climate Change Service (C3S)** for providing this open-access high-quality meteorological data.
+- **Data Access**: [Copernicus CDS](https://cds.climate.copernicus.eu/)
+- **Reference**: Hersbach, H., et al. (2020). "The ERA5 global reanalysis." *QJRMS*.
 
 ## Citation
 If you utilize this code or the PAER module, please cite the software archive:
